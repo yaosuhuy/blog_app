@@ -1,9 +1,13 @@
 import 'package:blog_app/core/theme/app_pallete.dart';
+import 'package:blog_app/features/auth/presentation/pages/signin_page.dart';
 import 'package:blog_app/features/auth/presentation/widgets/auth_field.dart';
 import 'package:blog_app/features/auth/presentation/widgets/auth_gradient_button.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 class SignupPage extends StatefulWidget {
+  static route() => MaterialPageRoute(builder: (context) => const SignupPage());
+
   const SignupPage({super.key});
 
   @override
@@ -23,10 +27,12 @@ class _SignupPageState extends State<SignupPage> {
     nameController.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     formKey.currentState?.validate();
     return Scaffold(
+      appBar: AppBar(),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Form(
@@ -43,21 +49,32 @@ class _SignupPageState extends State<SignupPage> {
               const SizedBox(height: 15),
               AuthField(hintText: 'Email', controller: emailController),
               const SizedBox(height: 15),
-              AuthField(hintText: 'Password', controller: passwordController, isObscureText: true),
+              AuthField(
+                hintText: 'Password',
+                controller: passwordController,
+                isObscureText: true,
+              ),
               const SizedBox(height: 15),
-              AuthGradientButton(),
+              AuthGradientButton(buttonText: "Sign Up"),
               const SizedBox(height: 20),
               RichText(
                 text: TextSpan(
-                  text: "Don't have an account?",
+                  text: "Already have an account?",
                   style: Theme.of(context).textTheme.titleMedium,
                   children: [
                     TextSpan(
                       text: ' Sign In',
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         color: AppPallete.gradient2,
-                        fontWeight: FontWeight.bold
+                        fontWeight: FontWeight.bold,
                       ),
+                       recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          Navigator.push(
+                            context,
+                            SigninPage.route(),
+                          );
+                        },
                     ),
                   ],
                 ),
