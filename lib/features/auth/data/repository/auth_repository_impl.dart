@@ -12,8 +12,16 @@ class AuthRepositoryImpl implements AuthRepository {
     required String name,
     required String email,
     required String password,
-  }) {
-    throw UnimplementedError();
+  }) async {
+    try {
+      final userId = await remoteDataSource.signInWithEmailPassword(
+        email: email,
+        password: password,
+      );
+      return right(userId);
+    } on ServerException catch (e) {
+      return left(Failure(e.message));
+    }
   }
 
   @override

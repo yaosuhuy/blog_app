@@ -50,7 +50,7 @@ class _SigninPageState extends State<SigninPage> {
                 isObscureText: true,
               ),
               const SizedBox(height: 15),
-              AuthGradientButton(buttonText: "Sign In"),
+              AuthGradientButton(buttonText: "Sign In", onPressed: () {}),
               const SizedBox(height: 20),
               RichText(
                 text: TextSpan(
@@ -65,10 +65,7 @@ class _SigninPageState extends State<SigninPage> {
                       ),
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
-                          Navigator.push(
-                            context,
-                            SignupPage.route(),
-                          );
+                          Navigator.push(context, SignupPage.route());
                         },
                     ),
                   ],
