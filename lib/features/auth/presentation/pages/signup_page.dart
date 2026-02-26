@@ -37,62 +37,74 @@ class _SignupPageState extends State<SignupPage> {
       appBar: AppBar(),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Form(
-          key: formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text(
-                'Sign up.',
-                style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 30),
-              AuthField(hintText: 'Name', controller: nameController),
-              const SizedBox(height: 15),
-              AuthField(hintText: 'Email', controller: emailController),
-              const SizedBox(height: 15),
-              AuthField(
-                hintText: 'Password',
-                controller: passwordController,
-                isObscureText: true,
-              ),
-              const SizedBox(height: 15),
-              AuthGradientButton(
-                buttonText: "Sign Up",
-                onPressed: () {
-                  if (formKey.currentState!.validate()) {
-                    context.read<AuthBloc>().add(
-                      AuthSignUp(
-                        name: nameController.text.trim(),
-                        email: emailController.text.trim(),
-                        password: passwordController.text.trim(),
-                      ),
-                    );
-                  }
-                },
-              ),
-              const SizedBox(height: 20),
-              RichText(
-                text: TextSpan(
-                  text: "Already have an account?",
-                  style: Theme.of(context).textTheme.titleMedium,
-                  children: [
-                    TextSpan(
-                      text: ' Sign In',
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        color: AppPallete.gradient2,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () {
-                          Navigator.push(context, SigninPage.route());
-                        },
+        child: BlocConsumer<AuthBloc, AuthState>(
+          listener: (context, state) {
+            if (state is AuthLoading) {
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(SnackBar(content: Text(state.message)));
+            }
+          },
+          builder: (context, state) {
+            return Form(
+              key: formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    'Sign up.',
+                    style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 30),
+                  AuthField(hintText: 'Name', controller: nameController),
+                  const SizedBox(height: 15),
+                  AuthField(hintText: 'Email', controller: emailController),
+                  const SizedBox(height: 15),
+                  AuthField(
+                    hintText: 'Password',
+                    controller: passwordController,
+                    isObscureText: true,
+                  ),
+                  const SizedBox(height: 15),
+                  AuthGradientButton(
+                    buttonText: "Sign Up",
+                    onPressed: () {
+                      if (formKey.currentState!.validate()) {
+                        context.read<AuthBloc>().add(
+                          AuthSignUp(
+                            name: nameController.text.trim(),
+                            email: emailController.text.trim(),
+                            password: passwordController.text.trim(),
+                          ),
+                        );
+                      }
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  RichText(
+                    text: TextSpan(
+                      text: "Already have an account?",
+                      style: Theme.of(context).textTheme.titleMedium,
+                      children: [
+                        TextSpan(
+                          text: ' Sign In',
+                          style: Theme.of(context).textTheme.titleMedium
+                              ?.copyWith(
+                                color: AppPallete.gradient2,
+                                fontWeight: FontWeight.bold,
+                              ),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              Navigator.push(context, SigninPage.route());
+                            },
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            );
+          },
         ),
       ),
     );
